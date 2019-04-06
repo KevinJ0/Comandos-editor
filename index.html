@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Huawei commands</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100vh;
+        }
+
+        main {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            padding: 0 10px 30px 10px;
+
+        }
+
+
+        button {
+
+            margin: 40px;
+        }
+
+        .rotate {
+
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body class="">
+    <button class="btn rotate" id="rotate">
+        <center>
+            <img width=30px; src="screen-rotation-button.svg" alt="Cambiar el angulo">
+        </center>
+    </button>
+
+    <div class="jumbotron">
+        <h1>Hauwei Commands</h1>
+        <p>Copia tus comandos de huawei a cuarta de chuleta</p>
+    </div>
+    <main id="main">
+
+        <textarea name="entrada" id="entrada" cols="100" rows="25"></textarea>
+
+        <button class="btn-lg btn-primary" id="transformar">Transformar
+            <span class="spinner-grow spinner-grow-sm"></span>
+        </button>
+        <textarea name="salida" id="salida" cols="100" rows="25"></textarea>
+
+
+    </main>
+
+</body>
+<script>
+    $(document).ready(function () {
+        let entrada = document.getElementById("entrada");
+        let salida = document.getElementById("salida");
+        let rotateBtn = document.getElementById("rotate");
+
+        $("#rotate").click(function rotar() {
+                if (vertical) {
+                    // aqui se poner en horizontal
+                    document.getElementById("main").style.flexDirection = "column";
+                    document.getElementsByTagName("textarea")[0].rows = 13;
+                    document.getElementsByTagName("textarea")[1].rows = 13;
+                    document.getElementsByTagName("textarea")[0].cols = 140;
+                    document.getElementsByTagName("textarea")[1].cols = 140;
+                    vertical = false;
+                } else {
+                    // aqui se poner en vertical
+                    document.getElementById("main").style.flexDirection = "row";
+                    document.getElementsByTagName("textarea")[0].rows = 25;
+                    document.getElementsByTagName("textarea")[1].rows = 25;
+                    document.getElementsByTagName("textarea")[0].cols = 100;
+                    document.getElementsByTagName("textarea")[1].cols = 100;
+                    vertical = true;
+
+                }
+
+            }
+
+        );
+        let vertical = true;
+
+
+
+
+        $("#transformar").click(function RemoveEnter() {
+            let texto = entrada.value;
+            var datos = "";
+            let firstP = texto.indexOf(']');
+            let lastP = texto.indexOf('[', firstP);
+
+            console.log(firstP);
+            console.log(lastP);
+
+            if (texto.charAt(texto.length - 1) == ']') {
+                texto = texto.substr(0, texto.length - 1);
+                //console.log(texto);
+            }
+            if (texto.charAt(texto.length - 1) != '[') {
+                texto += '[';
+                // console.log(texto);
+            }
+            do {
+                datos += texto.slice(firstP, lastP);
+                firstP = texto.indexOf(']', lastP);
+                lastP = texto.indexOf('[', firstP);
+                // console.log('firstP', firstP);
+                // console.log('lastP', lastP);
+            }
+            while (firstP != -1 && lastP != -1);
+
+            datos = datos.replace(/]/g, '\n');
+            salida.value = datos.trim();
+
+        });
+    });
+</script>
+
+</html>
